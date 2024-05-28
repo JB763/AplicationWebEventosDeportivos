@@ -1,0 +1,134 @@
+﻿
+@model System.Data.DataSet
+@{
+    ViewBag.Title = "Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2>Usuario</h2>
+    <!-- formulario para leer el dataset -->
+    <form method="post" action="@Url.Action("VistaUsuario", "Usuario")">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <label><b>Usuario&nbsp;</b></label>
+                <input type="text" id="idUsuario" required name="idUsuario" placeholder="Buscar por iD" style="color:black" />
+                <button type="submit" class="btn btn-secondary">Buscar</button>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearUsuario">
+                    Nuevo
+                </button>
+            </div>
+            <table class="table table-striped-columns">
+                <thead>
+                <thead>
+                    <tr>
+                        <td><b>idUsuario</b></td>
+                        <td><b>idParticipante</b></td>
+                        <td><b>Correo</b></td>
+                        <td><b>Contraseña</b></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Tables.Count > 0)
+                    {
+                        if (Model.Tables[0].Rows.Count > 0)
+                        {
+                            for (int i = 0; i < Model.Tables[0].Rows.Count; i++)
+                            {
+
+                                <!--Tabla que muestra el dataset de la tabla usuario-->
+                                <tr align="center">
+                                    <td class="active">@Model.Tables[0].Rows[i]["idUsuario"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["idParticipante"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["Correo"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["Contraseña"]</td>
+                                    <td><button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#actualizarUsuario">Actualizar</button></td>
+                                    <td><button type="button" class="btn btn-danger" onclick="location.href = '@Url.Action("EliminarUsuario", "Usuario", new {idUsuario = Model.Tables[0].Rows[i]["idUsuario"].ToString() })' ; return false;" >Eliminar</button></td>
+                                </tr>
+
+
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </form>
+    <!-- Modal nuevo -->
+    <div class="modal fade" id="crearUsuario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Nuevo Usuario</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="crearUsuarioForm" method="post" action="~/Usuario/CrearUsuario">
+                    <div class="modal-body">
+                        <!-- Campos para ingresar datos del usuario -->
+                        <div class="mb-3">
+                            <label for="idUsuarioCrear">ID de Usuario</label>
+                            <input type="text" class="form-control" id="idUsuarioCrear" name="idUsuario" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="idParticipanteCrear">ID de Participante</label>
+                            <input type="text" class="form-control" id="idParticipanteCrear" name="idParticipante" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="CorreoCrear">Correo Electronico</label>
+                            <input type="email" class="form-control" id="CorreoCrear" name="Correo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ContraseñaCrear">Contraseña</label>
+                            <input type="password" class="form-control" id="ContraseñaCrear" name="Contraseña" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="btnGuardarForm">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal actualizar -->
+    <div class="modal fade" id="actualizarUsuario" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Actualizar Usuario</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="actualizarUsuarioForm" method="post" action="~/Usuario/ActualizarUsuario">
+                    <div class="modal-body">
+                        <!-- actualiza los datos del usuario -->
+                        <div class="mb-3">
+                            <label for="idUsuarioActualizar">ID de Usuario</label>
+                            <input type="text" class="form-control" id="idUsuarioActualizar" name="idUsuario" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="idParticipanteActualizar">ID de Participante</label>
+                            <input type="text" class="form-control" id="idParticipanteActualizar" name="idParticipante" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="CorreoActualizar">Correo Electronico</label>
+                            <input type="email" class="form-control" id="CorreoActualizar" name="Correo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ContraseñaActualizar">Contraseña</label>
+                            <input type="password" class="form-control" id="ContraseñaActualizar" name="Contraseña" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="btnActualizarForm" onclick="ValidarActualizado();">Actualizar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+

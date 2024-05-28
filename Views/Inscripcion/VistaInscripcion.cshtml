@@ -1,0 +1,152 @@
+﻿@model System.Data.DataSet
+@{
+    ViewBag.Title = "VistaInscripcion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container mt-5">
+    <h2>Inscripcion</h2>
+    <!-- formulario para leer el dataset -->
+    <form method="post" action="@Url.Action("VistaInscripcion", "Inscripcion")">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <label><b>Inscripcion&nbsp;</b></label>
+                <input type="text" id="idInscripcion" required name="idInscripcion" placeholder="Buscar por iD" style="color:black" />
+                <button type="submit" class="btn btn-secondary">Buscar</button>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearInscripcion">
+                    Nuevo
+                </button>
+            </div>
+            <table class="table table-striped-columns">
+                <thead>
+                <thead>
+                    <tr>
+                        <td><b>idInscripcion</b></td>
+                        <td><b>idEventos</b></td>
+                        <td><b>idParticipante</b></td>
+                        <td><b>idFormaDepago</b></td>
+                        <td><b>fechaIn</b></td>
+                        <td><b>fechaFin</b></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Tables.Count > 0)
+                    {
+                        if (Model.Tables[0].Rows.Count > 0)
+                        {
+                            for (int i = 0; i < Model.Tables[0].Rows.Count; i++)
+                            {
+
+                                <!--Tabla que muestra el dataset de la tabla Inscripcion-->
+                                <tr align="center">
+                                    <td class="active">@Model.Tables[0].Rows[i]["idInscripcion"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["idEvento"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["idParticipante"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["idFormaDepago"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["fechaIn"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["fechaFin"]</td>
+                                    <td><button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#actualizarInscripcion">Actualizar</button></td>
+                                    <td><button type="button" class="btn btn-danger" onclick="location.href = '@Url.Action("EliminarInscripcion", "Inscripcion", new {idInscripcion = Model.Tables[0].Rows[i]["idInscripcion"].ToString() })' ; return false;">Eliminar</button></td>
+                                </tr>
+
+
+                            }
+                        }
+                     }
+                </tbody>
+            </table>
+        </div>
+    </form>
+    <!-- Modal nuevo -->
+    <div class="modal fade" id="crearInscripcion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Nueva Inscripcion</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="crearInscripcionForm" method="post" action="~/Inscripcion/CrearInscripcion">
+                    <div class="modal-body">
+                        <!-- Campos para ingresar datos de la Inscripcion -->
+                        <div class="mb-3">
+                            <label for="idInscripcionCrear">ID de Inscripcion</label>
+                            <input type="text" class="form-control" id="idInscripcionCrear" name="idInscripcion" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="idEventoCrear">ID De Evento</label>
+                            <input type="text" class="form-control" id="idEventoCrear" name="idEvento" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="idParticipanteCrear">ID De Participante</label>
+                            <input type="text" class="form-control" id="idParticipanteCrear" name="idParticipante" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="idFormaDePagoCrear">ID De Forma De Pago</label>
+                            <input type="text" class="form-control" id="idFormaDePagoCrear" name="idFormaDePago" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="FechaInCrear">Fecha De Inicio</label>
+                            <input type="date" class="form-control" id="FechaInCrear" name="FechaIn" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="FechaFinCrear">Fecha de Finalizacion</label>
+                            <input type="date" class="form-control" id="FechaFinCrear" name="FechaFin" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" id="btnGuardarForm">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal actualizar -->
+    <div class="modal fade" id="actualizarInscripcion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Actualizar Inscripcion</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="actualizarInscripcionForm" method="post" action="~/Inscripcion/actualizarInscripcion">
+                    <div class="modal-body">
+                        <!-- Campos para actualizar datos de la Inscripcion -->
+                        <div class="mb-3">
+                            <label for="idInscripcionActualizar">ID de Inscripcion</label>
+                            <input type="text" class="form-control" id="idInscripcionActualizar" name="idInscripcion" required readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="idEventoActualizar">ID De Evento</label>
+                            <input type="text" class="form-control" id="idEventoActualizar" name="idEvento" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="idParticipanteActualizar">ID De Participante</label>
+                            <input type="text" class="form-control" id="idParticipanteActualizar" name="idParticipante" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="idFormaDePagoActualizar">ID De Forma De Pago</label>
+                            <input type="text" class="form-control" id="idFormaDePagoActualizar" name="idFormaDePago" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="FechaInActualizar">Fecha De Inicio</label>
+                            <input type="date" class="form-control" id="FechaInActualizar" name="FechaIn" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="FechaFinActualizar">Fecha de Finalizacion</label>
+                            <input type="date" class="form-control" id="FechaFinActualizar" name="FechaFin" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" id="btnGuardarForm">Actualizar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+

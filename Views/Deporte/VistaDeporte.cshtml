@@ -1,0 +1,121 @@
+﻿@model System.Data.DataSet
+@{
+    ViewBag.Title = "VistaDeporte";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2>Deporte</h2>
+    <!-- formulario para leer el dataset -->
+    <form method="post" action="@Url.Action("VistaDeporte", "Deporte")">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <label><b>Deporte&nbsp;</b></label>
+                <input type="text" id="idDeporte" required name="idDeporte" placeholder="Buscar por iD" style="color:black" />
+                <button type="submit" class="btn btn-secondary">Buscar</button>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearDeporte">
+                    Nuevo
+                </button>
+            </div>
+            <table class="table table-striped-columns">
+                <thead>
+                <thead>
+                    <tr>
+                        <td><b>idDeporte</b></td>
+                        <td><b>TipoDeporte</b></td>
+                        <td><b>Categoria</b></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Tables.Count > 0)
+                    {
+                        if (Model.Tables[0].Rows.Count > 0)
+                        {
+                            for (int i = 0; i < Model.Tables[0].Rows.Count; i++)
+                            {
+
+                                <!--Tabla que muestra el dataset de la tabla Deporte-->
+                                <tr align="center">
+                                    <td class="active">@Model.Tables[0].Rows[i]["idDeporte"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["tipoDeporte"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["categoria"]</td>
+                                    <td><button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#actualizarDeporte">Actualizar</button></td>
+                                    <td><button type="button" class="btn btn-danger" onclick="location.href = '@Url.Action("EliminarDeporte", "Deporte", new {idDeporte = Model.Tables[0].Rows[i]["idDeporte"].ToString() })' ; return false;">Eliminar</button></td>
+                                </tr>
+                            }
+                        }
+                     }
+                </tbody>
+            </table>
+        </div>
+    </form>
+    <!-- Modal nuevo -->
+    <div class="modal fade" id="crearDeporte" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Nuevo Deporte</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="crearDeporteForm" method="post" action="~/Deporte/CrearDeporte">
+                    <div class="modal-body">
+                        <!-- Campos para ingresar datos del deporte -->
+                        <div class="mb-3">
+                            <label for="idDeporteCrear">ID de Deporte</label>
+                            <input type="text" class="form-control" id="idDeporteCrear" name="idDeporte" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="TipoDeporteCrear">Tipo de Deporte</label>
+                            <input type="text" class="form-control" id="TipoDeporteCrear" name="TipoDeporte" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="CategoriaCrear">Categoria</label>
+                            <input type="text" class="form-control" id="CategoriaCrear" name="Categoria" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="btnGuardarForm">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal actualizar -->
+    <div class="modal fade" id="actualizarDeporte" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Actualizar Deporte</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="actualizarDeporteForm" method="post" action="~/Deporte/ActualizarDeporte">
+                    <div class="modal-body">
+                        <!-- Campos para actualizar datos del deporte -->
+                        <div class="mb-3">
+                            <label for="idDeporteActualizar">ID de Deporte</label>
+                            <input type="text" class="form-control" id="idDeporteActualizar" name="idDeporte" required readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="TipoDeporteActualizar">Tipo de Deporte</label>
+                            <input type="text" class="form-control" id="TipoDeporteActualizar" name="TipoDeporte" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="CategoriaActualizar">Categoria</label>
+                            <input type="text" class="form-control" id="CategoriaActualizar" name="Categoria" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="btnGuardarForm">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+

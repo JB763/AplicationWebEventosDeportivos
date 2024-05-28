@@ -1,0 +1,151 @@
+﻿@model System.Data.DataSet
+@{
+    ViewBag.Title = "VistaParticipante";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2>Participante</h2>
+    <!-- formulario para leer el dataset -->
+    <form method="post" action="@Url.Action("VistaParticipante", "Participante")">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <label><b>Participante&nbsp;</b></label>
+                <input type="text" id="idParticipante" required name="idParticipante" placeholder="Buscar por iD" style="color:black" />
+                <button type="submit" class="btn btn-secondary">Buscar</button>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearParticipante">
+                    Nuevo
+                </button>
+            </div>
+            <table class="table table-striped-columns">
+                <thead>
+                <thead>
+                    <tr>
+                        <td><b>idParticipante</b></td>
+                        <td><b>Nombre</b></td>
+                        <td><b>Apellido</b></td>
+                        <td><b>Sexo</b></td>
+                        <td><b>Edad</b></td>
+                        <td><b>Telefono</b></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Tables.Count > 0)
+                    {
+                        if (Model.Tables[0].Rows.Count > 0)
+                        {
+                            for (int i = 0; i < Model.Tables[0].Rows.Count; i++)
+                            {
+
+                                <!--Tabla que muestra el dataset de la tabla Participante-->
+                                <tr align="center">
+                                    <td class="active">@Model.Tables[0].Rows[i]["idParticipante"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["Nombre"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["Apellido"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["Sexo"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["Edad"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["Telefono"]</td>
+                                    <td><button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#actualizarParticipante">Actualizar</button></td>
+                                    <td><button type="button" class="btn btn-danger" onclick="location.href = '@Url.Action("EliminarParticipante", "Participante", new {idParticipante = Model.Tables[0].Rows[i]["idParticipante"].ToString() })' ; return false;">Eliminar</button></td>
+                                </tr>
+
+
+                            }
+                        }
+                     }
+                </tbody>
+            </table>
+        </div>
+    </form>
+    <!-- Modal nuevo -->
+    <div class="modal fade" id="crearParticipante" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Nuevo Participante</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="crearParticipanteForm" method="post" action="~/Participante/CrearParticipante">
+                    <div class="modal-body">
+                        <!-- Campos para ingresar datos del Participante -->
+                        <div class="mb-3">
+                            <label for="idParticipanteCrear">ID de Participante</label>
+                            <input type="text" class="form-control" id="idParticipanteCrear" name="idParticipante" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="NombreCrear">Nombre</label>
+                            <input type="text" class="form-control" id="NombreCrear" name="Nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ApellidoCrear">Apellido</label>
+                            <input type="text" class="form-control" id="ApellidoCrear" name="Apellido" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="SexoCrear">Sexo</label>
+                            <input type="text" class="form-control" id="SexoCrear" name="Sexo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="EdadCrear">Edad</label>
+                            <input type="text" class="form-control" id="EdadCrear" name="Edad" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="TelefonoCrear">Telefono</label>
+                            <input type="text" class="form-control" id="TelefonoCrear" name="Telefono" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" id="btnGuardarForm">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal actualizar -->
+    <div class="modal fade" id="actualizarParticipante" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Actualizar Participante</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="actualizarParticipanteForm" method="post" action="~/Participante/ActualizarParticipante">
+                    <div class="modal-body">
+                        <!-- Campos para ingresar datos del Participante -->
+                        <div class="mb-3">
+                            <label for="idParticipanteActualizar">ID de Participante</label>
+                            <input type="text" class="form-control" id="idParticipanteActualizar" name="idParticipante" required readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="NombreActualizar">Nombre</label>
+                            <input type="text" class="form-control" id="NombreActualizar" name="Nombre" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ApellidoActualizar">Apellido</label>
+                            <input type="text" class="form-control" id="ApellidoActualizar" name="Apellido" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="SexoActualizar">Sexo</label>
+                            <input type="text" class="form-control" id="SexoActualizar" name="Sexo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="EdadActualizar">Edad</label>
+                            <input type="text" class="form-control" id="EdadActualizar" name="Edad" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="TelefonoActualizar">Telefono</label>
+                            <input type="text" class="form-control" id="TelefonoActualizar" name="Telefono" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" id="btnGuardarForm">Actualizar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+

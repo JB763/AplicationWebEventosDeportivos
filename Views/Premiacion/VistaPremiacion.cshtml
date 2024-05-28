@@ -1,0 +1,142 @@
+﻿@model System.Data.DataSet
+@{
+    ViewBag.Title = "VistaPremiacion";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="container mt-5">
+    <h2>Premiacion</h2>
+    <!-- formulario para leer el dataset -->
+    <form method="post" action="@Url.Action("VistaPremiacion", "Premiacion")">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <label><b>Premiacion&nbsp;</b></label>
+                <input type="text" id="idPremiacion" required name="idPremiacion" placeholder="Buscar por iD" style="color:black" />
+                <button type="submit" class="btn btn-secondary">Buscar</button>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearPremiacion">
+                    Nuevo
+                </button>
+            </div>
+            <table class="table table-striped-columns">
+                <thead>
+                <thead>
+                    <tr>
+                        <td><b>idPremiacion</b></td>
+                        <td><b>idEvento</b></td>
+                        <td><b>Posicion</b></td>
+                        <td><b>Descripcion</b></td>
+                        <td><b>Fecha</b></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Tables.Count > 0)
+                    {
+                        if (Model.Tables[0].Rows.Count > 0)
+                        {
+                            for (int i = 0; i < Model.Tables[0].Rows.Count; i++)
+                            {
+
+                                <!--Tabla que muestra el dataset de la tabla premiacion-->
+                                <tr align="center">
+                                    <td class="active">@Model.Tables[0].Rows[i]["idPremiacion"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["idEvento"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["posicion"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["descripcion"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["fecha"]</td>
+                                    <td><button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#actualizarPremiacion">Actualizar</button></td>
+                                    <td><button type="button" class="btn btn-danger" onclick="location.href = '@Url.Action("EliminarPremiacion", "Premiacion", new {idPremiacion = Model.Tables[0].Rows[i]["idPremiacion"].ToString() })' ; return false;">Eliminar</button></td>
+                                </tr>
+
+
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </form>
+    <!--modal nuevo-->
+    <div class="modal fade" id="crearPremiacion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Nueva Inscripcion</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="crearPremiacionForm" method="post" action="~/Premiacion/CrearPremiacion">
+                    <div class="modal-body">
+                        <!-- Campos para ingresar datos de la premiacion -->
+                        <div class="mb-3">
+                            <label for="idPremiacionCrear">ID de Premiacion</label>
+                            <input type="text" class="form-control" id="idPremiacionCrear" name="idPremiacion" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="idEventoCrear">ID De Evento</label>
+                            <input type="text" class="form-control" id="idEventoCrear" name="idEvento" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="PosicionCrear">Posicion</label>
+                            <input type="text" class="form-control" id="PosicionCrear" name="Posicion" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="DescripcionCrear">Descripcion</label>
+                            <input type="text" class="form-control" id="DescripcionCrear" name="Descripcion" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="FechaCrear">Fecha De Premiacion</label>
+                            <input type="date" class="form-control" id="FechaCrear" name="Fecha" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" id="btnGuardarForm">Guardar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!--modal actualizar-->
+    <div class="modal fade" id="actualizarPremiacion" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Actualizar Inscripcion</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="actualizarPremiacionForm" method="post" action="~/Premiacion/ActualizarPremiacion">
+                    <div class="modal-body">
+                        <!-- Campos para ingresar datos de la premiacion -->
+                        <div class="mb-3">
+                            <label for="idPremiacionActualizar">ID de Premiacion</label>
+                            <input type="text" class="form-control" id="idPremiacionActualizar" name="idPremiacion" required readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="idEventoActualizar">ID De Evento</label>
+                            <input type="text" class="form-control" id="idEventoActualizar" name="idEvento" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="PosicionActualizar">Posicion</label>
+                            <input type="text" class="form-control" id="PosicionActualizar" name="Posicion" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="DescripcionActualizar">Descripcion</label>
+                            <input type="text" class="form-control" id="DescripcionActualizar" name="Descripcion" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="FechaActualizar">Fecha De Premiacion</label>
+                            <input type="date" class="form-control" id="FechaActualizar" name="Fecha" required>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-primary" id="btnGuardarForm">Actualizar</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+</div>
+

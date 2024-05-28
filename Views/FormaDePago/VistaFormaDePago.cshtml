@@ -1,0 +1,111 @@
+﻿@model System.Data.DataSet
+@{
+    ViewBag.Title = "VistaFormaDePago";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="container mt-5">
+    <h2>FormaDePago</h2>
+    <!-- formulario para leer el dataset -->
+    <form method="post" action="@Url.Action("VistaFormaDePago", "FormaDePago")">
+        <div class="card">
+            <div class="card-header bg-primary text-white">
+                <label><b>FormaDePago&nbsp;</b></label>
+                <input type="text" id="idFormaDePago" required name="idFormaDePago" placeholder="Buscar por iD" style="color:black" />
+                <button type="submit" class="btn btn-secondary">Buscar</button>
+                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#crearFormaDePago">
+                    Nuevo
+                </button>
+            </div>
+            <table class="table table-striped-columns">
+                <thead>
+                <thead>
+                    <tr>
+                        <td><b>idFormaDePago</b></td>
+                        <td><b>TipoPago</b></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Tables.Count > 0)
+                    {
+                        if (Model.Tables[0].Rows.Count > 0)
+                        {
+                            for (int i = 0; i < Model.Tables[0].Rows.Count; i++)
+                            {
+
+                                <!--Tabla que muestra el dataset de la tabla formadepago-->
+                                <tr align="center">
+                                    <td class="active">@Model.Tables[0].Rows[i]["idFormaDePago"]</td>
+                                    <td class="active">@Model.Tables[0].Rows[i]["tipoPago"]</td>
+                                    <td><button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#actualizarFormaDePago">Actualizar</button></td>
+                                    <td><button type="button" class="btn btn-danger" onclick="location.href = '@Url.Action("EliminarFormaDePago", "FormaDePago", new {idFormaDePago = Model.Tables[0].Rows[i]["idFormaDePago"].ToString() })' ; return false;">Eliminar</button></td>
+                                </tr>
+
+
+                            }
+                        }
+                    }
+                </tbody>
+            </table>
+        </div>
+    </form>
+    <!-- Modal nuevo -->
+    <div class="modal fade" id="crearFormaDePago" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Nueva Forma de Pago</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="crearFormaDePagoForm" method="post" action="~/FormaDePago/CrearFormaDePago">
+                    <div class="modal-body">
+                        <!-- Campos para ingresar datos de formadepago -->
+                        <div class="mb-3">
+                            <label for="idFormaDePagoCrear">ID de Forma de pago</label>
+                            <input type="text" class="form-control" id="idFormaDePagoCrear" name="idFormaDePago" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="TipoPagoCrear">Tipo de forma de pago</label>
+                            <input type="text" class="form-control" id="TipoPagoCrear" name="TipoPago" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="btnGuardarForm">Guardar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- Modal actualizar -->
+    <div class="modal fade" id="actualizarFormaDePago" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="staticBackdropLabel">Actualizar Forma de Pago</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <form id="actualizarFormaDePagoForm" method="post" action="~/FormaDePago/ActualizarFormaDePago">
+                    <div class="modal-body">
+                        <!-- Campos para ingresar datos de formadepago -->
+                        <div class="mb-3">
+                            <label for="idFormaDePagoActualizar">ID de Forma de pago</label>
+                            <input type="text" class="form-control" id="idFormaDePagoActualizar" name="idFormaDePago" required readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="TipoPagoActualizar">Tipo de forma de pago</label>
+                            <input type="text" class="form-control" id="TipoPagoActualizar" name="TipoPago" required>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-primary" id="btnGuardarForm">Actualizar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+
